@@ -1,7 +1,7 @@
 """
 News aggregator service - orchestrates multiple connectors
 """
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Tuple
 import asyncio
 import logging
 from app.models.schemas import NewsArticle, SourceType
@@ -36,7 +36,7 @@ class NewsAggregatorService:
         country: Optional[str] = None,
         commodity: Optional[str] = None,
         limit: int = 10
-    ) -> tuple[List[NewsArticle], Optional[str]]:
+    ) -> Tuple[List[NewsArticle], Optional[str]]:
         """
         Fetch news from a specific source
         
@@ -68,7 +68,7 @@ class NewsAggregatorService:
         commodity: Optional[str] = None,
         category: Optional[str] = None,
         limit_per_source: int = 5
-    ) -> tuple[List[NewsArticle], List[str], List[str]]:
+    ) -> Tuple[List[NewsArticle], List[str], List[str]]:
         """
         Fetch news from all sources concurrently
         
