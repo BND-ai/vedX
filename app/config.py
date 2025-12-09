@@ -26,7 +26,12 @@ class Settings(BaseSettings):
     CACHE_TTL: int = 3600
     
     # CORS
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173"]
+    CORS_ORIGINS: List[str] = [
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "https://per-ton.ai",
+        "https://www.per-ton.ai",
+    ]
     
     class Config:
         env_file = ".env"
