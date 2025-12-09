@@ -1,0 +1,19 @@
+/* Overview Cards - Professional Data-Dense Style */.overview-cards {    display: grid;    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));    gap: 1rem;    margin-bottom: 1.5rem;}.overview-card {    background: #ffffff;    border: 1px solid #e0e0e0;    border-radius: 4px;    padding: 1rem;    transition: all 0.2s;}.overview-card:hover {    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);}.card-header {    display: flex;    align-items: center;    justify-content: space-between;    margin-bottom: 0.75rem;}.card-title {    font-size: 0.75rem;    font-weight: 600;    text-transform: uppercase;    letter-spacing: 0.5px;    color: #666;}.card-value {    font-size: 1.75rem;    font-weight: 700;    color: #1a1a1a;    margin-bottom: 0.5rem;    line-height: 1;}.card-change {    display: inline-flex;    align-items: center;    gap: 0.25rem;    font-size: 0.8rem;    font-weight: 600;    padding: 0.2rem 0.5rem;    border-radius: 2px;}.card-change.positive {    color: #2e7d32;    background: #e8f5e9;}.card-change.negative {    color: #c62828;    background: #ffebee;}.card-change.neutral {    color: #f57c00;    background: #fff8e1;}.card-footer {    font-size: 0.75rem;    color: #999;    margin-top: 0.5rem;    padding-top: 0.5rem;    border-top: 1px solid #f0f0f0;}/* Specific card border accents */.overview-card.price-card {    border-top: 3px solid #1976d2;}.overview-card.alert-card {    border-top: 3px solid #d32f2f;}.overview-card.risk-card {    border-top: 3px solid #f57c00;}.overview-card.weather-card {    border-top: 3px solid #7b1fa2;
+}
+
+@media (max-width: 768px) {
+    .overview-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .card-value {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .overview-cards {
+        grid-template-columns: 1fr;
+    }
+}

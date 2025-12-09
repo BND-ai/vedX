@@ -1,0 +1,428 @@
+/* Commodity Detail Drilldown */
+
+.commodity-detail {
+    padding: 0;
+}
+
+.detail-header {
+    margin-bottom: 2rem;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+}
+
+.back-btn:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+.commodity-title-section h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+}
+
+.title-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.commodity-symbol {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.current-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.price-change {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.price-change.positive {
+    color: #2e7d32;
+}
+
+.price-change.negative {
+    color: #c62828;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+.detail-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 1.25rem;
+}
+
+.chart-card {
+    grid-column: span 1;
+}
+
+.country-card {
+    grid-column: span 2;
+}
+
+.card-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.card-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-subtitle {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 0.25rem;
+}
+
+.timeframe-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.timeframe-selector button {
+    padding: 0.4rem 0.75rem;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.timeframe-selector button:hover {
+    background: #f5f5f5;
+}
+
+.timeframe-selector button.active {
+    background: #1976d2;
+    border-color: #1976d2;
+    color: #ffffff;
+}
+
+/* Country Table */
+.country-table-wrapper {
+    overflow-x: auto;
+}
+
+.country-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.country-table thead th {
+    background: #fafafa;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #1a1a1a;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.country-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.2s;
+}
+
+.country-row-clickable {
+    cursor: pointer;
+}
+
+.country-row-clickable:hover {
+    background: #e3f2fd !important;
+    border-left: 3px solid #1976d2;
+    transform: translateX(2px);
+}
+
+.country-table tbody td {
+    padding: 0.85rem 1rem;
+    color: #1a1a1a;
+}
+
+.country-name {
+    font-weight: 600;
+}
+
+.price-cell {
+    font-weight: 600;
+    color: #1976d2;
+}
+
+.risk-badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.risk-badge.low {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.risk-badge.medium {
+    background: #fff8e1;
+    color: #f57c00;
+}
+
+.risk-badge.high {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.risk-badge.very-high {
+    background: #d32f2f;
+    color: #ffffff;
+}
+
+.trend-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.trend-indicator.up {
+    color: #2e7d32;
+}
+
+.trend-indicator.down {
+    color: #c62828;
+}
+
+.trend-indicator.stable {
+    color: #666;
+}
+
+.trend-indicator.volatile {
+    color: #f57c00;
+}
+
+.quality-bar {
+    position: relative;
+    width: 100px;
+    height: 20px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.quality-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(to right, #2e7d32, #66bb6a);
+    border-radius: 3px;
+}
+
+.quality-bar span {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 20px;
+    color: #1a1a1a;
+}
+
+.ports-cell {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+/* Intelligence Card */
+.intelligence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.intelligence-item {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: #fafafa;
+    border-radius: 4px;
+}
+
+.intel-indicator {
+    width: 4px;
+    min-width: 4px;
+    border-radius: 2px;
+}
+
+.intel-indicator.trade { background: #1976d2; }
+.intel-indicator.price { background: #2e7d32; }
+.intel-indicator.supply { background: #f57c00; }
+.intel-indicator.climate { background: #7b1fa2; }
+.intel-indicator.geopolitics { background: #c62828; }
+
+.intel-content {
+    flex: 1;
+}
+
+.intel-category {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+.intel-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
+}
+
+.intel-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.7rem;
+    color: #999;
+}
+
+/* Decision Card */
+.decision-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.decision-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: #fafafa;
+    border-radius: 4px;
+}
+
+.decision-label {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.decision-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.decision-value.strong-buy {
+    color: #2e7d32;
+    font-size: 1rem;
+}
+
+.decision-value.positive {
+    color: #2e7d32;
+}
+
+.action-button {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    margin-bottom: 0.5rem;
+}
+
+.action-button.primary {
+    background: #1976d2;
+    color: #ffffff;
+}
+
+.action-button.primary:hover {
+    background: #1565c0;
+}
+
+.action-button.secondary {
+    background: #ffffff;
+    color: #1976d2;
+    border: 1px solid #1976d2;
+}
+
+.action-button.secondary:hover {
+    background: #e3f2fd;
+}
+
+@media (max-width: 1200px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .chart-card,
+    .country-card {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .commodity-title-section h1 {
+        font-size: 1.25rem;
+    }
+    
+    .title-meta {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .current-price {
+        font-size: 1.25rem;
+    }
+}

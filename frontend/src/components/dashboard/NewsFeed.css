@@ -1,0 +1,258 @@
+/* News Feed - Compact Professional Style */
+
+.news-feed-container {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.news-header {
+    margin-bottom: 1.5rem;
+}
+
+.news-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+}
+
+.news-filters {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 0.5rem 1rem;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover {
+    background: #e3f2fd;
+    border-color: #bbdefb;
+    color: #1976d2;
+}
+
+.filter-btn.active {
+    background: #1976d2;
+    border-color: #1976d2;
+    color: #ffffff;
+}
+
+.news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.news-loading,
+.news-error {
+    padding: 2rem;
+    text-align: center;
+    color: #666;
+}
+
+.news-error {
+    color: #d32f2f;
+    background: #ffebee;
+    border-radius: 6px;
+}
+
+.no-news {
+    padding: 2rem;
+    text-align: center;
+    color: #999;
+}
+
+.no-news p {
+    font-size: 0.95rem;
+}
+
+.news-item {
+    padding: 1.25rem;
+    background: #fafafa;
+    border: 1px solid #f0f0f0;
+    border-left: 4px solid #1976d2;
+    border-radius: 6px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.news-item:hover {
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-left-width: 6px;
+}
+
+.news-item.trade {
+    border-left-color: #1976d2;
+}
+
+.news-item.price {
+    border-left-color: #2e7d32;
+}
+
+.news-item.supply {
+    border-left-color: #f57c00;
+}
+
+.news-item.climate {
+    border-left-color: #7b1fa2;
+}
+
+.news-item.geopolitics {
+    border-left-color: #c62828;
+}
+
+.news-item-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.news-category {
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.news-category.trade {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.news-category.price {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.news-category.supply {
+    background: #fff8e1;
+    color: #f57c00;
+}
+
+.news-category.climate {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.news-category.geopolitics {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.news-time {
+    font-size: 0.75rem;
+    color: #999;
+    margin-left: auto;
+}
+
+.news-content h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.news-content p {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+}
+
+.news-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.75rem;
+    color: #999;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f0f0f0;
+    margin-bottom: 0.75rem;
+}
+
+.news-source {
+    font-weight: 600;
+    color: #666;
+}
+
+.news-region {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* Read More Button */
+.read-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    background: transparent;
+    color: #1976d2;
+    border: 1px solid #1976d2;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.read-more-btn:hover {
+    background: #1976d2;
+    color: #ffffff;
+}
+
+.read-more-btn svg {
+    transition: transform 0.2s;
+}
+
+.read-more-btn:hover svg {
+    transform: translateX(2px);
+}
+
+@media (max-width: 768px) {
+    .news-filters {
+        gap: 0.5rem;
+    }
+    
+    .filter-btn {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.75rem;
+    }
+    
+    .news-list {
+        max-height: 500px;
+    }
+
+    .news-item {
+        padding: 1rem;
+    }
+
+    .news-content h4 {
+        font-size: 0.9rem;
+    }
+
+    .news-content p {
+        font-size: 0.8rem;
+    }
+}

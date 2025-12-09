@@ -1,0 +1,259 @@
+/* Trade Table - Professional Data Table Style */
+
+.trade-table-container {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.table-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.table-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.trade-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+.trade-table thead th {
+    position: sticky;
+    top: 0;
+    background: #fafafa;
+    border-bottom: 2px solid #e0e0e0;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #1a1a1a;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.trade-table thead th:hover {
+    background: #f0f0f0;
+}
+
+.sort-indicator {
+    margin-left: 0.25rem;
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+.trade-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.15s;
+}
+
+.trade-table tbody tr:hover {
+    background: #fafafa;
+}
+
+.trade-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.trade-table tbody td {
+    padding: 0.9rem 1rem;
+    color: #1a1a1a;
+}
+
+.commodity-cell {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.quantity-cell {
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+}
+
+.price-cell {
+    font-weight: 600;
+}
+
+.price-positive {
+    color: #2e7d32;
+}
+
+.price-negative {
+    color: #c62828;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.status-badge.high {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #81c784;
+}
+
+.status-badge.medium {
+    background: #fff8e1;
+    color: #f57c00;
+    border: 1px solid #ffb74d;
+}
+
+.status-badge.low {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef5350;
+}
+
+.action-cell {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.icon-action-btn {
+    padding: 0.35rem;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-action-btn:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+.table-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f0f0f0;
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.pagination {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.page-btn {
+    padding: 0.4rem 0.75rem;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #666;
+}
+
+.page-btn:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+.page-btn.active {
+    background: #1976d2;
+    border-color: #1976d2;
+    color: #ffffff;
+}
+
+.page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Scrollbar styling */
+.table-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+@media (max-width: 768px) {
+    .trade-table-container {
+        padding: 1rem;
+    }
+    
+    .trade-table {
+        font-size: 0.75rem;
+    }
+    
+    .trade-table thead th,
+    .trade-table tbody td {
+        padding: 0.6rem 0.75rem;
+    }
+    
+    .table-footer {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}

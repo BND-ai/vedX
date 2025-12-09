@@ -1,0 +1,247 @@
+{
+  "info": {
+    "name": "Ananta News Aggregator API",
+    "description": "Multi-source news aggregation API for commodities, weather, and country-specific data",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/v1/health",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "health"
+          ]
+        },
+        "description": "Check API health status and version"
+      }
+    },
+    {
+      "name": "Category Tests",
+      "item": [
+        {
+          "name": "1. Overview (All News)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/v1/news/product/wheat?category=overview",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "news",
+                "product",
+                "wheat"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "overview"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. Trade News",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/v1/news/product/wheat?category=trade",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "news",
+                "product",
+                "wheat"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "trade"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. Price News",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/v1/news/product/wheat?category=price",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "news",
+                "product",
+                "wheat"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "price"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "4. Supply & Demand News",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/v1/news/product/wheat?category=supply_demand",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "news",
+                "product",
+                "wheat"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "supply_demand"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "5. Climate News",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/v1/news/product/wheat?category=climate",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "news",
+                "product",
+                "wheat"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "climate"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "6. Geopolitics News",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/v1/news/product/wheat?category=geopolitics",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "news",
+                "product",
+                "wheat"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "geopolitics"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "description": "Test requests for all specific news categories"
+    },
+    {
+      "name": "Get Cache Stats",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/v1/cache/stats",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "cache",
+            "stats"
+          ]
+        },
+        "description": "Get cache performance statistics"
+      }
+    },
+    {
+      "name": "List Categories",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/v1/categories",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "categories"
+          ]
+        },
+        "description": "Get list of available news categories"
+      }
+    }
+  ]
+}
