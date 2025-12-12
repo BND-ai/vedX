@@ -9,7 +9,7 @@
     "scripts": {
         "postinstall": "chmod +x node_modules/.bin/* 2>/dev/null || true",
         "dev": "vite",
-        "build": "npm exec -- vite build",
+        "build": "vite build",
         "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview"
     },
