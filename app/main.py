@@ -8,6 +8,7 @@ import logging
 
 from app.config import settings
 from app.routes import router
+from app.routes.climate_api import router as climate_router
 
 # Configure logging
 logging.basicConfig(
@@ -62,6 +63,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(router)
+app.include_router(climate_router)
 
 
 @app.get("/", include_in_schema=False)

@@ -4,6 +4,52 @@ import { LineChart, Line, BarChart, Bar, RadarChart, Radar, PolarGrid, PolarAngl
 import { COMMODITIES, COUNTRY_ANALYSIS, COUNTRY_PRICE_HISTORY } from '../../data/mockData';
 import './Compare.css';
 
+// Helper functions for seasonality analysis
+const generateSeasonalData = (commodityId, country) => {
+    const patterns = {
+        wheat: {
+            Russia: [-8, -5, 2, 8, 12, 15, 8, -2, -12, -15, -8, -3],
+            India: [-12, -8, 15, 18, 12, 5, -5, -8, -12, -18, -15, -5],
+            USA: [-5, -2, 8, 12, 15, 12, 5, -8, -15, -12, -8, -2],
+            Ukraine: [-15, -12, -5, 8, 15, 18, 12, 5, -8, -18, -15, -12],
+            Australia: [15, 12, 8, -5, -12, -15, -18, -12, -5, 8, 12, 18]
+        },
+        rice: {
+            India: [-15, -12, -8, 5, 12, 15, 18, 12, 5, -8, -18, -15],
+            Thailand: [-12, -8, -5, 8, 15, 18, 12, 5, -5, -12, -15, -8],
+            Vietnam: [-8, -5, 2, 12, 18, 15, 8, -2, -8, -15, -12, -5],
+            Pakistan: [-10, -5, 8, 15, 18, 12, 5, -5, -12, -18, -15, -8]
+        },
+        corn: {
+            USA: [-12, -8, -2, 8, 15, 18, 12, 5, -8, -15, -18, -12],
+            Brazil: [12, 15, 18, 8, -5, -12, -15, -18, -8, 5, 12, 15],
+            Argentina: [18, 15, 8, -5, -12, -18, -15, -8, 5, 12, 18, 15],
+            Ukraine: [-15, -12, -5, 8, 15, 18, 12, 5, -8, -18, -15, -12]
+        },
+        soybean: {
+            USA: [-8, -5, 2, 12, 18, 15, 8, -2, -12, -18, -15, -8],
+            Brazil: [15, 18, 12, 5, -8, -15, -18, -12, -5, 8, 15, 18],
+            Argentina: [18, 12, 5, -8, -15, -18, -12, -5, 8, 15, 18, 12],
+            Paraguay: [12, 8, 2, -5, -12, -15, -12, -8, -2, 8, 12, 15]
+        }
+    };
+    return patterns[commodityId]?.[country] || [0,0,0,0,0,0,0,0,0,0,0,0];
+};
+
+const getSeasonalInsights = (commodityId, country) => {
+    const data = generateSeasonalData(commodityId, country);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const minIdx = data.indexOf(Math.min(...data));
+    const maxIdx = data.indexOf(Math.max(...data));
+    return {
+        bestBuyMonth: months[minIdx],
+        bestSellMonth: months[maxIdx],
+        buyDiscount: Math.abs(Math.min(...data)),
+        sellPremium: Math.max(...data),
+        seasonalSpread: Math.max(...data) - Math.min(...data)
+    };
+};
+
 const Compare = () => {
     const [comparisons, setComparisons] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -444,6 +490,108 @@ const Compare = () => {
                                     })}
                                 </LineChart>
                             </ResponsiveContainer>
+                        </div>
+                    </div>
+
+                    {/* Seasonality Analysis Section */}
+                    <div className="comparison-section">
+                        <h2>Price Seasonality Analysis</h2>
+                        <p style={{fontSize: '0.875rem', color: '#666', marginBottom: '1.5rem'}}>
+                            Historical seasonal patterns and optimal trading windows
+                        </p>
+                        
+                        {/* Seasonal Heatmap */}
+                        <div className="seasonality-heatmap">
+                            <h3>Monthly Price Patterns</h3>
+                            <div className="heatmap-container">
+                                {comparisons.map(comp => {
+                                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                                    const seasonalData = generateSeasonalData(comp.commodity.id, comp.country.country);
+                                    
+                                    return (
+                                        <div key={comp.id} className="heatmap-row">
+                                            <div className="heatmap-label">
+                                                <span className="heatmap-icon">{comp.commodity.icon}</span>
+                                                <div>
+                                                    <div className="heatmap-commodity">{comp.commodity.name}</div>
+                                                    <div className="heatmap-country">{comp.country.country}</div>
+                                                </div>
+                                            </div>
+                                            <div className="heatmap-cells">
+                                                {months.map((month, idx) => {
+                                                    const value = seasonalData[idx];
+                                                    const intensity = Math.abs(value) / 20;
+                                                    const isPositive = value > 0;
+                                                    
+                                                    return (
+                                                        <div 
+                                                            key={month}
+                                                            className="heatmap-cell"
+                                                            style={{
+                                                                backgroundColor: isPositive 
+                                                                    ? `rgba(244, 67, 54, ${intensity})` 
+                                                                    : `rgba(76, 175, 80, ${intensity})`,
+                                                                color: intensity > 0.5 ? 'white' : '#333'
+                                                            }}
+                                                            title={`${month}: ${value > 0 ? '+' : ''}${value}% vs average`}
+                                                        >
+                                                            <div className="cell-month">{month}</div>
+                                                            <div className="cell-value">{value > 0 ? '+' : ''}{value}%</div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <div className="heatmap-legend">
+                                <span className="legend-item">
+                                    <div className="legend-color" style={{backgroundColor: 'rgba(76, 175, 80, 0.7)'}}></div>
+                                    Below Average (Buy)
+                                </span>
+                                <span className="legend-item">
+                                    <div className="legend-color" style={{backgroundColor: 'rgba(244, 67, 54, 0.7)'}}></div>
+                                    Above Average (Sell)
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Trading Recommendations */}
+                        <div className="seasonal-recommendations">
+                            <h3>Seasonal Trading Insights</h3>
+                            <div className="recommendations-grid">
+                                {comparisons.map(comp => {
+                                    const insights = getSeasonalInsights(comp.commodity.id, comp.country.country);
+                                    return (
+                                        <div key={comp.id} className="seasonal-card">
+                                            <div className="seasonal-header">
+                                                <span className="seasonal-icon">{comp.commodity.icon}</span>
+                                                <div>
+                                                    <div className="seasonal-commodity">{comp.commodity.name}</div>
+                                                    <div className="seasonal-country">{comp.country.country}</div>
+                                                </div>
+                                            </div>
+                                            <div className="seasonal-insights">
+                                                <div className="insight-item best-buy">
+                                                    <span className="insight-label">Best Buy:</span>
+                                                    <span className="insight-value">{insights.bestBuyMonth}</span>
+                                                    <span className="insight-detail">({insights.buyDiscount}% below avg)</span>
+                                                </div>
+                                                <div className="insight-item best-sell">
+                                                    <span className="insight-label">Best Sell:</span>
+                                                    <span className="insight-value">{insights.bestSellMonth}</span>
+                                                    <span className="insight-detail">({insights.sellPremium}% above avg)</span>
+                                                </div>
+                                                <div className="insight-item spread">
+                                                    <span className="insight-label">Seasonal Spread:</span>
+                                                    <span className="insight-value">{insights.seasonalSpread}%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
 

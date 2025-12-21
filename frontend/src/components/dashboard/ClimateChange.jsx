@@ -153,7 +153,7 @@ const ClimateChange = () => {
             <div className="climate-stats-grid">
                 <div className="climate-stat-card">
                     <div className="stat-icon" style={{background: '#fee2e2'}}>
-                        <AlertTriangle size={24} color="#ef4444" />
+                        <AlertTriangle size={18} color="#ef4444" />
                     </div>
                     <div className="stat-content">
                         <div className="stat-label">Active Weather Events</div>
@@ -166,7 +166,7 @@ const ClimateChange = () => {
 
                 <div className="climate-stat-card">
                     <div className="stat-icon" style={{background: '#fef3c7'}}>
-                        <Activity size={24} color="#f59e0b" />
+                        <Activity size={18} color="#f59e0b" />
                     </div>
                     <div className="stat-content">
                         <div className="stat-label">Commodities at Risk</div>
@@ -179,7 +179,7 @@ const ClimateChange = () => {
 
                 <div className="climate-stat-card">
                     <div className="stat-icon" style={{background: '#ffedd5'}}>
-                        <MapPin size={24} color="#f97316" />
+                        <MapPin size={18} color="#f97316" />
                     </div>
                     <div className="stat-content">
                         <div className="stat-label">Supply Chain Disruptions</div>
@@ -192,7 +192,7 @@ const ClimateChange = () => {
 
                 <div className="climate-stat-card">
                     <div className="stat-icon" style={{background: '#dcfce7'}}>
-                        <TrendingUp size={24} color="#10b981" />
+                        <TrendingUp size={18} color="#10b981" />
                     </div>
                     <div className="stat-content">
                         <div className="stat-label">Price Impact This Month</div>
@@ -481,6 +481,42 @@ const ClimateChange = () => {
                     </span>
                 </div>
 
+                {/* Event Timeline */}
+                <div className="timeline-section">
+                    <h2>Climate Event Timeline</h2>
+                    <div className="timeline-container">
+                        {regionEvents.map((event, index) => (
+                            <div key={event.id} className="timeline-item">
+                                <div className="timeline-marker" style={{background: getRiskColor(event.severity)}}></div>
+                                <div className="timeline-content">
+                                    <div className="timeline-header">
+                                        <h3>{event.title}</h3>
+                                        <span className="timeline-date">{event.daysAgo} days ago</span>
+                                    </div>
+                                    <p className="timeline-description">{event.description}</p>
+                                    <div className="timeline-forecast">
+                                        <strong>Forecast:</strong> {event.forecast}
+                                    </div>
+                                    <div className="timeline-metrics">
+                                        <div className="timeline-metric">
+                                            <span>Yield:</span>
+                                            <strong>{event.yieldImpact}%</strong>
+                                        </div>
+                                        <div className="timeline-metric">
+                                            <span>Price:</span>
+                                            <strong>+{event.priceImpact}%</strong>
+                                        </div>
+                                        <div className="timeline-metric">
+                                            <span>Status:</span>
+                                            <strong>{event.status}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 {/* Climate Indicators */}
                 <div className="indicators-section">
                     <h2>Climate Indicators - {selectedRegion.name} Agricultural Belt</h2>
@@ -564,42 +600,6 @@ const ClimateChange = () => {
                                 </div>
                             );
                         })}
-                    </div>
-                </div>
-
-                {/* Event Timeline */}
-                <div className="timeline-section">
-                    <h2>Climate Event Timeline</h2>
-                    <div className="timeline-container">
-                        {regionEvents.map((event, index) => (
-                            <div key={event.id} className="timeline-item">
-                                <div className="timeline-marker" style={{background: getRiskColor(event.severity)}}></div>
-                                <div className="timeline-content">
-                                    <div className="timeline-header">
-                                        <h3>{event.title}</h3>
-                                        <span className="timeline-date">{event.daysAgo} days ago</span>
-                                    </div>
-                                    <p className="timeline-description">{event.description}</p>
-                                    <div className="timeline-forecast">
-                                        <strong>Forecast:</strong> {event.forecast}
-                                    </div>
-                                    <div className="timeline-metrics">
-                                        <div className="timeline-metric">
-                                            <span>Yield:</span>
-                                            <strong>{event.yieldImpact}%</strong>
-                                        </div>
-                                        <div className="timeline-metric">
-                                            <span>Price:</span>
-                                            <strong>+{event.priceImpact}%</strong>
-                                        </div>
-                                        <div className="timeline-metric">
-                                            <span>Status:</span>
-                                            <strong>{event.status}</strong>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
                     </div>
                 </div>
 

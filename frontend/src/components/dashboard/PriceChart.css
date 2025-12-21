@@ -8,6 +8,82 @@
     margin-bottom: 1.5rem;
 }
 
+/* Price KPIs Section */
+.price-kpis-section {
+    margin-bottom: 2rem;
+}
+
+.price-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.price-kpi-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    gap: 0.75rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.price-kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.kpi-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.kpi-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.kpi-label {
+    font-size: 0.75rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.kpi-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+}
+
+.kpi-value.positive {
+    color: #16a34a;
+}
+
+.kpi-value.negative {
+    color: #dc2626;
+}
+
+.kpi-value.neutral {
+    color: #6b7280;
+}
+
+.kpi-subtext {
+    font-size: 0.6875rem;
+    color: #999;
+    font-weight: 400;
+}
+
 .chart-header {
     display: flex;
     align-items: center;
@@ -18,9 +94,18 @@
 }
 
 .chart-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 0.95rem;
     font-weight: 600;
     color: #1a1a1a;
+}
+
+.chart-title h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 
 .chart-controls {
@@ -55,6 +140,38 @@
     width: 100%;
     height: 350px;
     margin-top: 1rem;
+}
+
+/* Charts Grid Layout */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.chart-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.chart-header-small {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.chart-header-small h4 {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1a1a;
 }
 
 /* Recharts customization */
@@ -111,6 +228,16 @@
     color: #1a1a1a;
 }
 
+@media (max-width: 1024px) {
+    .price-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
     .chart-wrapper {
         height: 280px;
@@ -123,5 +250,33 @@
     .timeframe-btn {
         font-size: 0.75rem;
         padding: 0.35rem 0.6rem;
+    }
+
+    .price-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .price-kpi-card {
+        padding: 0.875rem;
+    }
+
+    .kpi-value {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .price-kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .chart-card {
+        padding: 1rem;
     }
 }

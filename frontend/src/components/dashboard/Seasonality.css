@@ -1,0 +1,340 @@
+.seasonality-view {
+    padding: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.seasonality-header {
+    margin-bottom: 2rem;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-content h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #1976d2;
+}
+
+.header-content p {
+    margin: 0.25rem 0 0 0;
+    color: #666;
+    font-size: 1rem;
+}
+
+/* Controls */
+.seasonality-controls {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.control-group label {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.control-group select {
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    min-width: 200px;
+}
+
+.country-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    max-width: 400px;
+}
+
+.country-chip {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.country-chip:hover {
+    border-color: #1976d2;
+}
+
+.country-chip.selected {
+    background: #1976d2;
+    color: white;
+    border-color: #1976d2;
+}
+
+.country-chip:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Sections */
+.seasonality-section {
+    margin-bottom: 3rem;
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.seasonality-section h2 {
+    margin: 0 0 1.5rem 0;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+/* Chart */
+.chart-container {
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+/* Heatmap */
+.heatmap-container {
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.heatmap-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.heatmap-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.heatmap-label {
+    min-width: 120px;
+    margin-right: 1rem;
+}
+
+.country-name {
+    font-weight: 600;
+    color: #333;
+}
+
+.heatmap-cells {
+    display: flex;
+    gap: 2px;
+    flex: 1;
+}
+
+.heatmap-cell {
+    flex: 1;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: transform 0.2s;
+    min-width: 70px;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.05);
+    z-index: 10;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.cell-month {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.cell-value {
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.heatmap-legend {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+}
+
+.legend-color.green {
+    background: rgba(76, 175, 80, 0.7);
+}
+
+.legend-color.red {
+    background: rgba(244, 67, 54, 0.7);
+}
+
+/* Insights */
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.insight-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border-left: 4px solid #1976d2;
+}
+
+.insight-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.commodity-icon {
+    font-size: 1.5rem;
+}
+
+.insight-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.insight-header p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.insight-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.metric {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 8px;
+    border-left: 3px solid;
+}
+
+.metric.buy {
+    border-left-color: #4caf50;
+}
+
+.metric.sell {
+    border-left-color: #f44336;
+}
+
+.metric.spread {
+    border-left-color: #ff9800;
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    color: #666;
+    display: block;
+}
+
+.metric-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1976d2;
+    display: block;
+}
+
+.metric-detail {
+    font-size: 0.75rem;
+    color: #888;
+    display: block;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+}
+
+.empty-state h3 {
+    margin: 1rem 0 0.5rem 0;
+    color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .seasonality-controls {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .country-chips {
+        max-width: none;
+    }
+    
+    .heatmap-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .heatmap-label {
+        min-width: auto;
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+    
+    .heatmap-cells {
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+    
+    .heatmap-cell {
+        min-width: 60px;
+    }
+    
+    .insights-grid {
+        grid-template-columns: 1fr;
+    }
+}

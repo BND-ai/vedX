@@ -27,6 +27,8 @@ import NewsFeed from './dashboard/NewsFeed';
 import PriceChart from './dashboard/PriceChart';
 import TradeTable from './dashboard/TradeTable';
 import OverviewCards from './dashboard/OverviewCards';
+import Seasonality from './dashboard/Seasonality';
+import ClimateImpact from './dashboard/ClimateImpact';
 import './Dashboard.css';
 
 const Dashboard = ({ selectedProducts, onLogout, onProductsUpdate }) => {
@@ -411,19 +413,11 @@ const Dashboard = ({ selectedProducts, onLogout, onProductsUpdate }) => {
                     )}
                     
                     {activeView === 'seasonality' && (
-                        <div className="coming-soon">
-                            <Calendar size={48} />
-                            <h2>Price - Seasonality</h2>
-                            <p>Seasonal price trends and patterns analysis</p>
-                        </div>
+                        <Seasonality />
                     )}
                     
                     {activeView === 'climate-change' && (
-                        <div className="coming-soon">
-                            <CloudRain size={48} />
-                            <h2>Climate Change</h2>
-                            <p>Climate impact analysis on commodity supply</p>
-                        </div>
+                        <ClimateImpact selectedProducts={displayedProducts} />
                     )}
                     
                     {activeView === 'news' && (
