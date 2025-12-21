@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     REQUEST_TIMEOUT: int = 30
     CACHE_ENABLED: bool = False
     CACHE_TTL: int = 3600
+    # Custom TTL and update intervals
+    CLIMATE_DATA_CACHE_TTL: int = 1800
+    WEATHER_UPDATE_INTERVAL: int = 3600
+    PRICE_UPDATE_INTERVAL: int = 900
     
     # CORS
     CORS_ORIGINS: List[str] = [
