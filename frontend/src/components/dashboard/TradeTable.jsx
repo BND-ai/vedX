@@ -3,7 +3,7 @@ import { TRADE_DATA } from '../../data/mockData';
 import { Package, ArrowUpDown, Download } from 'lucide-react';
 import './TradeTable.css';
 
-const TradeTable = ({ selectedProducts }) => {
+const TradeTable = ({ selectedProducts, filteredCommodity, filteredCountry }) => {
     const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
 
     const handleSort = (key) => {
@@ -14,7 +14,31 @@ const TradeTable = ({ selectedProducts }) => {
         setSortConfig({ key, direction });
     };
 
-    const sortedData = [...TRADE_DATA].sort((a, b) => {
+    // Filter trade data based on selected filters
+    const filteredData = TRADE_DATA.filter(trade => {
+        // Filter by commodity if specified
+        if (filteredCommodity) {
+            const commodityName = trade.commodity.toLowerCase();
+            const filterName = filteredCommodity.toLowerCase();
+            if (commodityName !== filterName) {
+                return false;
+            }
+        }
+        
+        // Filter by country if specified (check both exporter and importer)
+        if (filteredCountry) {
+            const countryName = filteredCountry.toLowerCase();
+            const exporterMatch = trade.exporter.toLowerCase().includes(countryName);
+            const importerMatch = trade.importer.toLowerCase().includes(countryName);
+            if (!exporterMatch && !importerMatch) {
+                return false;
+            }
+        }
+        
+        return true;
+    });
+
+    const sortedData = [...filteredData].sort((a, b) => {
         if (sortConfig.direction === 'asc') {
             return a[sortConfig.key] > b[sortConfig.key] ? 1 : -1;
         }
@@ -101,6 +125,12 @@ const TradeTable = ({ selectedProducts }) => {
             <div className="table-footer">
                 <span className="showing-count">
                     Showing {sortedData.length} of {TRADE_DATA.length} trades
+                    {(filteredCommodity || filteredCountry) && (
+                        <span className="filter-indicator">
+                            {filteredCommodity && ` • ${filteredCommodity}`}
+                            {filteredCountry && ` • ${filteredCountry}`}
+                        </span>
+                    )}
                 </span>
                 <div className="pagination">
                     <button className="pagination-btn" disabled>Previous</button>

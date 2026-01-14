@@ -3,6 +3,7 @@ import asyncio
 from typing import List, Dict, Any
 from datetime import datetime, timedelta
 import logging
+from .config_service import config
 
 logger = logging.getLogger(__name__)
 
@@ -11,10 +12,6 @@ class PriceService:
         self.alpha_vantage_base_url = "https://www.alphavantage.co/query"
         self.fred_base_url = "https://api.stlouisfed.org/fred"
         self.yahoo_base_url = "https://query1.finance.yahoo.com/v8/finance/chart"
-        
-        # FREE API Keys - Register at respective sites
-        self.alpha_vantage_key = "YOUR_ALPHA_VANTAGE_KEY"  # FREE - 25 calls/day
-        self.fred_api_key = "YOUR_FRED_API_KEY"  # FREE - Unlimited
     
     async def get_commodity_prices(self, commodities: List[str]) -> Dict[str, Any]:
         """Get commodity prices from multiple sources - FREE"""
@@ -40,6 +37,11 @@ class PriceService:
     async def _get_alpha_vantage_price(self, commodity: str) -> Dict[str, Any]:
         """Get price from Alpha Vantage - FREE (25 calls/day)"""
         try:
+            # Skip if no API key
+            if not config.is_service_enabled('alpha_vantage'):
+                logger.info(f"Alpha Vantage API key not configured, skipping {commodity}")
+                return {}
+            
             # Map commodities to Alpha Vantage symbols
             symbol_map = {
                 'Wheat': 'WHEAT',
@@ -55,7 +57,7 @@ class PriceService:
             params = {
                 'function': 'GLOBAL_QUOTE',
                 'symbol': f"{symbol}=F",  # Futures symbol
-                'apikey': self.alpha_vantage_key
+                'apikey': config.get_api_key('alpha_vantage')
             }
             
             async with httpx.AsyncClient() as client:
@@ -81,32 +83,42 @@ class PriceService:
             return {}
     
     async def _get_yahoo_price(self, commodity: str) -> Dict[str, Any]:
-        """Get price from Yahoo Finance - FREE (Unlimited)"""
+        """Get price from Yahoo Finance - FREE (No API key needed)"""
         try:
             # Map commodities to Yahoo Finance symbols
             symbol_map = {
                 'Wheat': 'ZW=F',    # Wheat futures
                 'Corn': 'ZC=F',     # Corn futures
                 'Rice': 'ZR=F',     # Rice futures  
-                'Soybean': 'ZS=F'   # Soybean futures
+                'Soybean': 'ZS=F',  # Soybean futures
+                'Cotton': 'CT=F',   # Cotton futures
+                'Sugar': 'SB=F',    # Sugar futures
+                'Coffee': 'KC=F',   # Coffee futures
+                'Gold': 'GC=F',     # Gold futures
+                'Silver': 'SI=F',   # Silver futures
+                'Crude': 'CL=F'     # Crude oil futures
             }
             
             symbol = symbol_map.get(commodity)
             if not symbol:
                 return {}
             
-            async with httpx.AsyncClient() as client:
-                response = await client.get(f"{self.yahoo_base_url}/{symbol}")
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
+            
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(f"{self.yahoo_base_url}/{symbol}", headers=headers)
                 if response.status_code == 200:
                     data = response.json()
                     
-                    if 'chart' in data and 'result' in data['chart']:
+                    if 'chart' in data and 'result' in data['chart'] and data['chart']['result']:
                         result = data['chart']['result'][0]
                         meta = result.get('meta', {})
                         
                         current_price = meta.get('regularMarketPrice', 0)
                         previous_close = meta.get('previousClose', 0)
-                        change = current_price - previous_close
+                        change = current_price - previous_close if current_price and previous_close else 0
                         change_percent = (change / previous_close * 100) if previous_close > 0 else 0
                         
                         return {
@@ -149,9 +161,14 @@ class PriceService:
     async def _get_fred_data(self, series_id: str) -> Dict[str, Any]:
         """Get data from FRED API - FREE"""
         try:
+            # Skip if no API key
+            if not config.is_service_enabled('fred'):
+                logger.info(f"FRED API key not configured, skipping {series_id}")
+                return {}
+            
             params = {
                 'series_id': series_id,
-                'api_key': self.fred_api_key,
+                'api_key': config.get_api_key('fred'),
                 'file_type': 'json',
                 'limit': 1,
                 'sort_order': 'desc'

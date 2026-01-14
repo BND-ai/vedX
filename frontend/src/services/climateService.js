@@ -1,8 +1,30 @@
 const API_BASE_URL = 'http://localhost:8000/api/v1/climate';
 
 class ClimateService {
+    async getLiveWeatherData() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/weather`);
+            if (!response.ok) throw new Error('Failed to fetch live weather data');
+            
+            const data = await response.json();
+            return data.data;
+        } catch (error) {
+            console.error('Error fetching live weather data:', error);
+            return { agricultural_weather: [], weather_alerts: [], noaa_forecasts: [] };
+        }
+    }
     async getClimateAlerts(commodities = []) {
         try {
+            // First try to get live weather data
+            const liveWeatherData = await this.getLiveWeatherData();
+            if (liveWeatherData.weather_alerts && liveWeatherData.weather_alerts.length > 0) {
+                return {
+                    weather_alerts: liveWeatherData.weather_alerts,
+                    regional_risks: this.transformWeatherToRegionalRisks(liveWeatherData.agricultural_weather)
+                };
+            }
+            
+            // Fallback to original API
             const params = new URLSearchParams();
             commodities.forEach(commodity => params.append('commodities', commodity));
             
@@ -116,6 +138,36 @@ class ClimateService {
             console.error('Error fetching seasonality matrix:', error);
             return { seasonality_matrix: [] };
         }
+    }
+
+    // Transform live weather data to regional risks
+    transformWeatherToRegionalRisks(agriculturalWeather) {
+        return agriculturalWeather.map(region => {
+            const openMeteoData = region.open_meteo || {};
+            const openWeatherData = region.openweather || {};
+            
+            // Calculate risk based on weather conditions
+            const temp = openMeteoData.current_temp || openWeatherData.temperature || 25;
+            const humidity = openMeteoData.humidity || openWeatherData.humidity || 50;
+            const precipitation = openMeteoData.precipitation || 0;
+            
+            let riskLevel = 'Low';
+            if (temp > 35 || temp < 5) riskLevel = 'High';
+            else if (temp > 30 || temp < 10) riskLevel = 'Medium';
+            
+            if (precipitation < 1 && temp > 30) riskLevel = 'Critical';
+            
+            return {
+                region: region.region,
+                commodity: region.commodity,
+                drought_risk: precipitation < 2 ? 'High' : 'Medium',
+                precipitation_30d: precipitation,
+                temperature_trend: temp > 30 ? 'rising' : 'stable',
+                risk_level: riskLevel,
+                current_temp: temp,
+                humidity: humidity
+            };
+        });
     }
 
     // Transform API data to component format

@@ -5,7 +5,7 @@ from typing import List, Optional
 from datetime import datetime
 from app.connectors.base import BaseConnector
 from app.models.schemas import NewsArticle
-from app.services.config_service import config
+from app.config import settings
 import logging
 
 logger = logging.getLogger(__name__)
@@ -16,6 +16,8 @@ class GoogleSearchConnector(BaseConnector):
     
     def __init__(self):
         super().__init__()
+        self.api_key = settings.GOOGLE_CUSTOM_SEARCH_API_KEY
+        self.search_engine_id = settings.GOOGLE_CUSTOM_SEARCH_ENGINE_ID
         self.base_url = "https://www.googleapis.com/customsearch/v1"
     
     async def fetch_news(
@@ -28,7 +30,7 @@ class GoogleSearchConnector(BaseConnector):
         """Fetch news from Google Custom Search"""
         
         # Check if API key is configured
-        if not config.is_service_enabled('google_search'):
+        if not self.api_key or self.api_key == "your_google_api_key_here":
             logger.warning("Google API key not configured, returning mock data")
             return self._get_mock_data(query or commodity or "commodity", country, limit)
         
@@ -59,8 +61,8 @@ class GoogleSearchConnector(BaseConnector):
             
             # Make API request
             params = {
-                "key": config.get_api_key('google_search'),
-                "cx": config.google_search_engine_id,
+                "key": self.api_key,
+                "cx": self.search_engine_id,
                 "q": search_query,
                 "num": min(articles_per_keyword, 10)
             }

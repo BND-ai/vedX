@@ -18,7 +18,73 @@
 }
 
 .table-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.export-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.export-btn:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+.th-content {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.pagination-btn {
+    padding: 0.4rem 0.75rem;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #666;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.page-indicator {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.showing-count {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.value-cell {
     font-weight: 600;
     color: #1a1a1a;
 }
@@ -185,6 +251,11 @@
     border-top: 1px solid #f0f0f0;
     font-size: 0.75rem;
     color: #666;
+}
+
+.filter-indicator {
+    color: #1976d2;
+    font-weight: 500;
 }
 
 .pagination {

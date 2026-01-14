@@ -13,79 +13,132 @@ const PriceChart = ({ selectedProducts }) => {
     // Get commodity colors
     const colors = ['#0066ff', '#00d4ff', '#ffa500', '#00ff00', '#ff4444'];
 
+    // Filter data based on timeframe
+    const getFilteredData = (data, timeframe) => {
+        if (!data || data.length === 0) return data;
+        
+        try {
+            let dataPoints;
+            
+            switch (timeframe) {
+                case '1D':
+                    dataPoints = 1;
+                    break;
+                case '1W':
+                    dataPoints = 7;
+                    break;
+                case '1M':
+                    dataPoints = 30;
+                    break;
+                case '3M':
+                    dataPoints = 90;
+                    break;
+                case '1Y':
+                    dataPoints = 365;
+                    break;
+                default:
+                    return data;
+            }
+            
+            // Return last N data points
+            return data.slice(-dataPoints);
+        } catch (error) {
+            console.error('Error filtering data:', error);
+            return data;
+        }
+    };
+
     // Calculate KPIs for selected commodities
     const priceKPIs = useMemo(() => {
-        if (!selectedProducts.length) return [];
+        try {
+            if (!selectedProducts.length) return [];
 
-        return selectedProducts.map(productId => {
-            const productData = PRICE_DATA[productId];
-            if (!productData || productData.length === 0) return null;
+            return selectedProducts.map(productId => {
+                const productData = PRICE_DATA[productId];
+                if (!productData || productData.length === 0) return null;
 
-            const commodity = COMMODITIES.find(c => c.id === productId);
-            const latestPrice = productData[productData.length - 1].price;
-            const previousPrice = productData.length > 1 ? productData[productData.length - 2].price : latestPrice;
-            const weekAgoPrice = productData.length > 7 ? productData[productData.length - 8].price : productData[0].price;
-            const monthAgoPrice = productData[0].price;
+                // Filter data based on timeframe
+                const filteredData = getFilteredData(productData, timeframe);
+                if (filteredData.length === 0) return null;
 
-            // Calculate changes
-            const change1D = ((latestPrice - previousPrice) / previousPrice) * 100;
-            const change7D = ((latestPrice - weekAgoPrice) / weekAgoPrice) * 100;
-            const change30D = ((latestPrice - monthAgoPrice) / monthAgoPrice) * 100;
+                const commodity = COMMODITIES.find(c => c.id === productId);
+                const latestPrice = filteredData[filteredData.length - 1].price;
+                const previousPrice = filteredData.length > 1 ? filteredData[filteredData.length - 2].price : latestPrice;
+                const weekAgoPrice = filteredData.length > 7 ? filteredData[filteredData.length - 8].price : filteredData[0].price;
+                const firstPrice = filteredData[0].price;
 
-            // Calculate volatility (standard deviation of price changes)
-            const priceChanges = [];
-            for (let i = 1; i < productData.length; i++) {
-                const change = ((productData[i].price - productData[i - 1].price) / productData[i - 1].price) * 100;
-                priceChanges.push(change);
-            }
-            const avgChange = priceChanges.reduce((sum, val) => sum + val, 0) / priceChanges.length;
-            const variance = priceChanges.reduce((sum, val) => sum + Math.pow(val - avgChange, 2), 0) / priceChanges.length;
-            const volatility = Math.sqrt(variance).toFixed(2);
+                // Calculate changes based on filtered timeframe
+                const change1D = ((latestPrice - previousPrice) / previousPrice) * 100;
+                const change7D = ((latestPrice - weekAgoPrice) / weekAgoPrice) * 100;
+                const changeTotal = ((latestPrice - firstPrice) / firstPrice) * 100;
 
-            // Determine trend
-            const trend = change30D > 2 ? 'bullish' : change30D < -2 ? 'bearish' : 'neutral';
-            const trendLabel = change30D > 2 ? 'Bullish' : change30D < -2 ? 'Bearish' : 'Neutral';
+                // Calculate volatility (standard deviation of price changes)
+                const priceChanges = [];
+                for (let i = 1; i < filteredData.length; i++) {
+                    const change = ((filteredData[i].price - filteredData[i - 1].price) / filteredData[i - 1].price) * 100;
+                    priceChanges.push(change);
+                }
+                const avgChange = priceChanges.length > 0 ? priceChanges.reduce((sum, val) => sum + val, 0) / priceChanges.length : 0;
+                const variance = priceChanges.length > 0 ? priceChanges.reduce((sum, val) => sum + Math.pow(val - avgChange, 2), 0) / priceChanges.length : 0;
+                const volatility = Math.sqrt(variance).toFixed(2);
 
-            // Find support and resistance
-            const prices = productData.map(d => d.price);
-            const support = Math.min(...prices);
-            const resistance = Math.max(...prices);
+                // Determine trend based on total change in timeframe
+                const trend = changeTotal > 2 ? 'bullish' : changeTotal < -2 ? 'bearish' : 'neutral';
+                const trendLabel = changeTotal > 2 ? 'Bullish' : changeTotal < -2 ? 'Bearish' : 'Neutral';
 
-            return {
-                commodity,
-                latestPrice,
-                change1D: change1D.toFixed(2),
-                change7D: change7D.toFixed(2),
-                change30D: change30D.toFixed(2),
-                volatility,
-                trend,
-                trendLabel,
-                support,
-                resistance
-            };
-        }).filter(Boolean);
-    }, [selectedProducts]);
+                // Find support and resistance from filtered data
+                const prices = filteredData.map(d => d.price);
+                const support = Math.min(...prices);
+                const resistance = Math.max(...prices);
+
+                return {
+                    commodity,
+                    latestPrice,
+                    change1D: change1D.toFixed(2),
+                    change7D: change7D.toFixed(2),
+                    change30D: changeTotal.toFixed(2),
+                    volatility,
+                    trend,
+                    trendLabel,
+                    support,
+                    resistance
+                };
+            }).filter(Boolean);
+        } catch (error) {
+            console.error('Error calculating KPIs:', error);
+            return [];
+        }
+    }, [selectedProducts, timeframe]);
 
     // Merge price data for all selected products
     const getMergedData = () => {
-        if (!selectedProducts.length) return [];
-        
-        const dates = PRICE_DATA[selectedProducts[0]]?.map(d => d.date) || [];
-        
-        return dates.map(date => {
-            const dataPoint = { date };
-            selectedProducts.forEach(productId => {
-                const productData = PRICE_DATA[productId];
-                if (productData) {
-                    const priceEntry = productData.find(p => p.date === date);
-                    if (priceEntry) {
-                        const commodity = COMMODITIES.find(c => c.id === productId);
-                        dataPoint[commodity.name] = priceEntry.price;
+        try {
+            if (!selectedProducts.length) return [];
+            
+            const dates = PRICE_DATA[selectedProducts[0]]?.map(d => d.date) || [];
+            
+            const mergedData = dates.map(date => {
+                const dataPoint = { date };
+                selectedProducts.forEach(productId => {
+                    const productData = PRICE_DATA[productId];
+                    if (productData) {
+                        const priceEntry = productData.find(p => p.date === date);
+                        if (priceEntry) {
+                            const commodity = COMMODITIES.find(c => c.id === productId);
+                            if (commodity) {
+                                dataPoint[commodity.name] = priceEntry.price;
+                            }
+                        }
                     }
-                }
+                });
+                return dataPoint;
             });
-            return dataPoint;
-        });
+            
+            return getFilteredData(mergedData, timeframe);
+        } catch (error) {
+            console.error('Error merging data:', error);
+            return [];
+        }
     };
 
     const data = getMergedData();
@@ -98,25 +151,40 @@ const PriceChart = ({ selectedProducts }) => {
         const dates = PRICE_DATA[selectedProducts[0]]?.map(d => d.date) || [];
         const firstDatePrices = {};
         
-        selectedProducts.forEach(productId => {
-            const productData = PRICE_DATA[productId];
-            if (productData && productData.length > 0) {
-                const commodity = COMMODITIES.find(c => c.id === productId);
-                firstDatePrices[commodity.name] = productData[0].price;
-            }
-        });
-        
-        return dates.map(date => {
+        const baseData = dates.map(date => {
             const dataPoint = { date };
             selectedProducts.forEach(productId => {
                 const productData = PRICE_DATA[productId];
                 if (productData) {
                     const priceEntry = productData.find(p => p.date === date);
                     const commodity = COMMODITIES.find(c => c.id === productId);
-                    if (priceEntry && firstDatePrices[commodity.name]) {
-                        const change = ((priceEntry.price - firstDatePrices[commodity.name]) / firstDatePrices[commodity.name]) * 100;
-                        dataPoint[`${commodity.name} Change`] = change;
+                    if (priceEntry) {
+                        dataPoint[commodity.name] = priceEntry.price;
                     }
+                }
+            });
+            return dataPoint;
+        });
+        
+        const filteredData = getFilteredData(baseData, timeframe);
+        
+        // Set first date prices from filtered data
+        if (filteredData.length > 0) {
+            selectedProducts.forEach(productId => {
+                const commodity = COMMODITIES.find(c => c.id === productId);
+                if (filteredData[0][commodity.name]) {
+                    firstDatePrices[commodity.name] = filteredData[0][commodity.name];
+                }
+            });
+        }
+        
+        return filteredData.map(item => {
+            const dataPoint = { date: item.date };
+            selectedProducts.forEach(productId => {
+                const commodity = COMMODITIES.find(c => c.id === productId);
+                if (item[commodity.name] && firstDatePrices[commodity.name]) {
+                    const change = ((item[commodity.name] - firstDatePrices[commodity.name]) / firstDatePrices[commodity.name]) * 100;
+                    dataPoint[`${commodity.name} Change`] = change;
                 }
             });
             return dataPoint;
@@ -162,17 +230,16 @@ const PriceChart = ({ selectedProducts }) => {
     const getVolatilityData = () => {
         if (!selectedProducts.length) return [];
         
-        const dates = PRICE_DATA[selectedProducts[0]]?.map(d => d.date) || [];
+        const baseData = getMergedData();
         
-        return dates.map((date, index) => {
-            if (index < 2) return { date, volatility: 0 };
+        return baseData.map((item, index) => {
+            if (index < 2) return { date: item.date, volatility: 0 };
             
-            const dataPoint = { date };
+            const dataPoint = { date: item.date };
             selectedProducts.forEach(productId => {
-                const productData = PRICE_DATA[productId];
-                if (productData && index >= 2) {
-                    const commodity = COMMODITIES.find(c => c.id === productId);
-                    const prices = productData.slice(Math.max(0, index - 2), index + 1).map(p => p.price);
+                const commodity = COMMODITIES.find(c => c.id === productId);
+                if (index >= 2) {
+                    const prices = baseData.slice(Math.max(0, index - 2), index + 1).map(d => d[commodity.name]).filter(p => p);
                     if (prices.length >= 2) {
                         const changes = [];
                         for (let i = 1; i < prices.length; i++) {
@@ -187,10 +254,10 @@ const PriceChart = ({ selectedProducts }) => {
         }).filter(d => d.date);
     };
 
-    const percentageChangeData = getPercentageChangeData();
-    const movingAverageData = getMovingAverageData(3);
+    const percentageChangeData = useMemo(() => getPercentageChangeData(), [selectedProducts, timeframe]);
+    const movingAverageData = useMemo(() => getMovingAverageData(3), [selectedProducts, timeframe]);
     const currentPricesData = getCurrentPricesData();
-    const volatilityData = getVolatilityData();
+    const volatilityData = useMemo(() => getVolatilityData(), [selectedProducts, timeframe]);
 
     return (
         <div className="price-chart-container">
@@ -211,7 +278,7 @@ const PriceChart = ({ selectedProducts }) => {
                                 </div>
                             </div>
 
-                            {/* 30-Day Change */}
+                            {/* Period Change */}
                             <div className="price-kpi-card">
                                 <div className="kpi-icon" style={{background: kpi.trend === 'bullish' ? '#dcfce7' : kpi.trend === 'bearish' ? '#fee2e2' : '#f3f4f6'}}>
                                     {kpi.trend === 'bullish' ? <TrendingUp size={20} color="#16a34a" /> : 
@@ -219,7 +286,7 @@ const PriceChart = ({ selectedProducts }) => {
                                      <Activity size={20} color="#6b7280" />}
                                 </div>
                                 <div className="kpi-content">
-                                    <div className="kpi-label">30-Day Change</div>
+                                    <div className="kpi-label">{timeframe} Change</div>
                                     <div className={`kpi-value ${kpi.trend === 'bullish' ? 'positive' : kpi.trend === 'bearish' ? 'negative' : 'neutral'}`}>
                                         {kpi.change30D > 0 ? '+' : ''}{kpi.change30D}%
                                     </div>

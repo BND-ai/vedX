@@ -108,8 +108,6 @@ const Dashboard = ({ selectedProducts, onLogout, onProductsUpdate }) => {
     const handleSaveFilter = () => {
         setFilteredCommodity(tempFilteredCommodity);
         setShowFilterSaveBtn(false);
-        setFilteredCountry(null); // Reset country filter when commodity changes
-        setTempFilteredCountry(null);
         setShowToast(true);
         setTimeout(() => setShowToast(false), 3000);
     };
@@ -128,8 +126,9 @@ const Dashboard = ({ selectedProducts, onLogout, onProductsUpdate }) => {
         setTimeout(() => setShowToast(false), 3000);
     };
 
-    // Get available countries for selected commodity
-    const availableCountries = filteredCommodity ? getCountriesForCommodity(filteredCommodity) : [];
+    // Get available countries for selected commodity (including temp selection)
+    const availableCountries = (filteredCommodity || tempFilteredCommodity) ? 
+        getCountriesForCommodity(filteredCommodity || tempFilteredCommodity) : [];
 
     const menuItems = [
         { id: 'home', icon: LayoutDashboard, label: 'Home' },
@@ -153,6 +152,16 @@ const Dashboard = ({ selectedProducts, onLogout, onProductsUpdate }) => {
 
     const handleNavigation = (view) => {
         navigate(`/dashboard/${view}`);
+    };
+
+    // Combined save function for both filters
+    const handleSaveAllFilters = () => {
+        setFilteredCommodity(tempFilteredCommodity);
+        setFilteredCountry(tempFilteredCountry);
+        setShowFilterSaveBtn(false);
+        setShowCountryFilterSaveBtn(false);
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
     };
 
     return (
@@ -243,33 +252,35 @@ const Dashboard = ({ selectedProducts, onLogout, onProductsUpdate }) => {
                             Edit Commodities
                         </button>
 
-                        <div className="commodity-selector">
-                            <select 
-                                className={`commodity-dropdown ${filteredCommodity ? 'filtered' : ''}`}
-                                value={tempFilteredCommodity || filteredCommodity || 'all'}
-                                onChange={handleDropdownChange}
-                            >
-                                <option value="all">All Commodities</option>
-                                {selectedCommodities.map(commodity => (
-                                    <option key={commodity.id} value={commodity.id}>
-                                        {commodity.name}
-                                    </option>
-                                ))}
-                            </select>
-                            {showFilterSaveBtn && (
-                                <button className="save-filter-btn" onClick={handleSaveFilter}>
-                                    Save Filter
-                                </button>
-                            )}
-                        </div>
-
-                        {/* Country Filter - Only show when commodity is selected */}
-                        {filteredCommodity && availableCountries.length > 0 && (
-                            <div className="commodity-selector country-selector">
+                        {/* Filter Section */}
+                        <div className="filter-section">
+                            <h3 className="filter-title">Filters</h3>
+                            
+                            {/* Commodity Filter */}
+                            <div className="filter-group">
+                                <label className="filter-label">Commodity</label>
                                 <select 
-                                    className={`commodity-dropdown ${filteredCountry ? 'filtered' : ''}`}
+                                    className={`filter-dropdown ${filteredCommodity ? 'filtered' : ''}`}
+                                    value={tempFilteredCommodity || filteredCommodity || 'all'}
+                                    onChange={handleDropdownChange}
+                                >
+                                    <option value="all">All Commodities</option>
+                                    {selectedCommodities.map(commodity => (
+                                        <option key={commodity.id} value={commodity.id}>
+                                            {commodity.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Country Filter */}
+                            <div className="filter-group">
+                                <label className="filter-label">Country</label>
+                                <select 
+                                    className={`filter-dropdown ${filteredCountry ? 'filtered' : ''}`}
                                     value={tempFilteredCountry || filteredCountry || 'all'}
                                     onChange={handleCountryDropdownChange}
+                                    disabled={!filteredCommodity && !tempFilteredCommodity}
                                 >
                                     <option value="all">All Countries</option>
                                     {availableCountries.map(country => (
@@ -278,13 +289,15 @@ const Dashboard = ({ selectedProducts, onLogout, onProductsUpdate }) => {
                                         </option>
                                     ))}
                                 </select>
-                                {showCountryFilterSaveBtn && (
-                                    <button className="save-filter-btn" onClick={handleSaveCountryFilter}>
-                                        Save Filter
-                                    </button>
-                                )}
                             </div>
-                        )}
+
+                            {/* Save Filter Button */}
+                            {(showFilterSaveBtn || showCountryFilterSaveBtn) && (
+                                <button className="save-filter-btn" onClick={handleSaveAllFilters}>
+                                    Save Filters
+                                </button>
+                            )}
+                        </div>
 
                         <nav className="sidebar-nav">
                             {menuItems.map(item => (
@@ -306,13 +319,9 @@ const Dashboard = ({ selectedProducts, onLogout, onProductsUpdate }) => {
                         <div className="dashboard-content">
                             <OverviewCards selectedProducts={displayedProducts} />
                             
-                            <div className="dashboard-grid">
-                                <div className="grid-item-large">
+                            <div className="dashboard-grid-single">
+                                <div className="grid-item-full">
                                     <PriceChart selectedProducts={displayedProducts} />
-                                </div>
-                                
-                                <div className="grid-item-medium">
-                                    <TradeTable />
                                 </div>
                             </div>
 

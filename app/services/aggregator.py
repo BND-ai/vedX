@@ -81,17 +81,21 @@ class NewsAggregatorService:
         
         # Modify query based on category to get relevant results
         search_query = query
+        category_query_enhancers = {
+            "trade": "export import trading deal contract shipment logistics",
+            "price": "price cost surge rally decline volatility futures forecast",
+            "supply_demand": "production harvest inventory shortage surplus supply demand",
+            "climate": "weather drought flood storm climate rainfall temperature",
+            "geopolitics": "policy regulation government sanction ban restriction tax"
+        }
+        
         if query and category and category != "overview":
-            category_keywords = {
-                "trade": "export import trade tariff shipment",
-                "price": "price cost market forecast inflation",
-                "supply_demand": "supply demand production consumption inventory shortage",
-                "climate": "weather drought rain flood harvest season",
-                "geopolitics": "policy government ban regulation tax conflict"
-            }
-            if category in category_keywords:
-                # Add keywords to query to improve relevance
-                search_query = f"{query} {category_keywords[category]}"
+            if category in category_query_enhancers:
+                # Add category-specific keywords to improve relevance
+                search_query = f"{query} {category_query_enhancers[category]}"
+        elif category and category != "overview" and category in category_query_enhancers:
+            # If no query but category specified, use category keywords
+            search_query = category_query_enhancers[category]
         
         for source_type, connector in self.connectors.items():
             tasks.append(

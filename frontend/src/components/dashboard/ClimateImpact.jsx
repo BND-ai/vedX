@@ -17,16 +17,17 @@ const ClimateImpact = ({ selectedProducts = [] }) => {
     
     // Fetch real-time data when commodities change
     useEffect(() => {
-        if (selectedCommodityNames.length > 0) {
-            fetchRealTimeData();
-        }
+        fetchRealTimeData();
     }, [selectedCommodityNames]);
     
     const fetchRealTimeData = async () => {
         setLoading(true);
         try {
-            const data = await climateService.getClimateDashboard(selectedCommodityNames);
-            setRealTimeData(data);
+            const [dashboardData, liveWeatherData] = await Promise.all([
+                climateService.getClimateDashboard(selectedCommodityNames.length > 0 ? selectedCommodityNames : ['corn', 'wheat', 'rice', 'soybean']),
+                climateService.getLiveWeatherData()
+            ]);
+            setRealTimeData({ ...dashboardData, liveWeather: liveWeatherData });
         } catch (error) {
             console.error('Error fetching real-time climate data:', error);
         } finally {
@@ -54,8 +55,32 @@ const ClimateImpact = ({ selectedProducts = [] }) => {
         ? climateService.transformPriceImpactMatrix(realTimeData.price_impact_matrix)
         : [];
 
-    // Regional Risk Data - filtered by selected commodities
-    const allRegionalRisks = [
+    // Regional Risk Data - use live weather data if available
+    const allRegionalRisks = realTimeData?.liveWeather?.agricultural_weather?.map(region => {
+        const openMeteoData = region.open_meteo || {};
+        const openWeatherData = region.openweather || {};
+        
+        const temp = openMeteoData.current_temp || openWeatherData.temperature || 25;
+        const precipitation = openMeteoData.precipitation || 0;
+        const humidity = openMeteoData.humidity || openWeatherData.humidity || 50;
+        
+        let overallRisk = 'Low';
+        if (temp > 35 && precipitation < 1) overallRisk = 'Critical';
+        else if (temp > 30 && precipitation < 2) overallRisk = 'High';
+        else if (temp > 25 || precipitation < 5) overallRisk = 'Medium';
+        
+        return {
+            region: region.region,
+            drought: precipitation < 2 ? 5 : precipitation < 5 ? 3 : 1,
+            flood: precipitation > 20 ? 4 : precipitation > 10 ? 2 : 1,
+            temp: temp > 35 ? 5 : temp > 30 ? 4 : temp > 25 ? 3 : 2,
+            overall: overallRisk,
+            commodity: region.commodity,
+            currentTemp: temp,
+            currentPrecipitation: precipitation,
+            humidity: humidity
+        };
+    }) || [
         { region: 'US Midwest', drought: 4, flood: 2, temp: 3, overall: 'High', commodity: 'Corn' },
         { region: 'Argentina', drought: 5, flood: 4, temp: 2, overall: 'Critical', commodity: 'Soybean' },
         { region: 'Australia', drought: 3, flood: 1, temp: 4, overall: 'Medium', commodity: 'Wheat' },
@@ -115,6 +140,8 @@ const ClimateImpact = ({ selectedProducts = [] }) => {
                     <div>
                         <h1>Climate Impact Analysis</h1>
                         <p>Real-time climate risk assessment for commodity supply chains</p>
+                        {loading && <div className="live-status loading">🔴 Loading live data...</div>}
+                        {!loading && <div className="live-status active">🟢 Live weather data active</div>}
                     </div>
                 </div>
                 <div className="timeframe-selector">
@@ -274,6 +301,11 @@ const ClimateImpact = ({ selectedProducts = [] }) => {
                                     <Thermometer size={14} />
                                     <span>Temp: {region.temp}/5</span>
                                 </div>
+                                {region.currentTemp && (
+                                    <div className="risk-item live-data">
+                                        <span>🟢 Live: {region.currentTemp}°C, {region.currentPrecipitation}mm</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}

@@ -7,7 +7,6 @@
         "node": ">=18.0.0"
     },
     "scripts": {
-        "postinstall": "chmod +x node_modules/.bin/* 2>/dev/null || true",
         "dev": "vite",
         "build": "vite build",
         "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
